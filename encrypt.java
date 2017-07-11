@@ -4,9 +4,9 @@ import java.io.*;
 import java.nio.*;
 public class encrypt
 {
-	public static String get_message()
+	public static String get_message(String filename)
 	{
-		File file = new File("plain_text_message.txt");
+		File file = new File(filename);
 		String output = "";
 		BufferedReader reader = null;
 		try 
@@ -34,16 +34,19 @@ public class encrypt
 		        {
 		            reader.close();
 		        }
-		    } catch (IOException e) {
+		    } 
+		    catch (IOException e) 
+		    {
 		    	e.printStackTrace();
 		    }
 		}
 		return output;
 	}
-	public static String[] get_keys()
+	public static String[] get_keys(String filename)
 	{
-		File file = new File("user1.txt");
-		String[] output = new String[6];
+		File file = new File(filename);
+		// this is a bit of a hack, but whatever 
+		String[] output = new String[10];
 		BufferedReader reader = null;
 		try 
 		{
@@ -72,30 +75,78 @@ public class encrypt
 		        {
 		            reader.close();
 		        }
-		    } catch (IOException e) {
+		    } 
+		    catch (IOException e) 
+		    {
 		    	e.printStackTrace();
 		    }
 		}
 		return output;
 	}
+	public static void write_cypto_message(String message)
+	{
+		final String OUT_FILE = "encrypted_message.txt";
+		BufferedWriter bw = null;
+		FileWriter fw = null;
+
+		try
+		{
+
+			fw = new FileWriter(OUT_FILE);
+			bw = new BufferedWriter(fw);
+			bw.write(message);
+
+			System.out.println("Done");
+
+		} catch (IOException e) {
+
+			e.printStackTrace();
+
+		} finally {
+
+			try {
+
+				if (bw != null)
+					bw.close();
+
+				if (fw != null)
+					fw.close();
+
+			} catch (IOException ex) {
+
+				ex.printStackTrace();
+
+			}
+
+		}
+	}
 	public static void main (String args[])
 	{
-		String message = get_message();
-		// keys has form: 
-		//System.out.println("Private key:\n"+ d + "\n" + n + "\nPublic key:\n" + E + "\n" + n );
-		String[] keys = get_keys();
+		String key_file = "";
+		String message_file = "";
+		if(args.length == 2)
+		{
+			key_file = args[0];
+			message_file = args[1];
+		}
+		else
+		{
+			System.out.println("incorrect number of args. Terminating program");
+			System.exit(0);
+		}
+
+		String message = get_message(message_file);
+		String[] keys = get_keys(key_file);
+		String crypto_message = "";
 		BigInteger letter = new BigInteger("0");
 		BigInteger E = new BigInteger(keys[4]);
 		BigInteger N = new BigInteger(keys[5]);
 		for (int i = 0; i< message.length(); i++)
 		{
-			// System.out.print((int)x.charAt(i));
 			letter = new BigInteger(String.valueOf((int)message.charAt(i)));
 			letter = letter.modPow(E,N);
-			// System.out.println("x");
-			System.out.println(letter.toString());
+			crypto_message += letter.toString() + "\n";
 		}
-	    System.out.println();
-
+		write_cypto_message(crypto_message);	   
 	}
 }

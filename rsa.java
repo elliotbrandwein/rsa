@@ -67,7 +67,7 @@ public class rsa
 			filename = args[0];
 		else
 		{
-			System.out.println("incorrect number of args, terminating program");
+			System.out.println("incorrect number of args. Terminating program");
 			System.exit(0);
 		}
 		BigInteger p = new BigInteger("0");
