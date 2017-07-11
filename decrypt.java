@@ -4,10 +4,11 @@ import java.nio.file.*;
 import java.math.*;
 public class decrypt
 {
-	public static String[] get_keys()
+	public static String[] get_keys(String filename)
 	{
-		File file = new File("user1.txt");
-		String[] output = new String[6];
+		File file = new File(filename);
+		// same hack as before, probably should make this array dynamic 
+		String[] output = new String[10];
 		BufferedReader reader = null;
 		try 
 		{
@@ -36,21 +37,96 @@ public class decrypt
 		        {
 		            reader.close();
 		        }
-		    } catch (IOException e) {
+		    } 
+		    catch (IOException e) 
+		    {
+		    	e.printStackTrace();
 		    }
 		}
 		return output;
 	}
-	public static void main (String args[])
+	public static int get_line_count(String filename)
 	{
-		File file = new File("input.txt");
-		String input = "";
+		File file = new File(filename);
 		BufferedReader reader = null;
+		int line_count = 0;
 		try {
 		    reader = new BufferedReader(new FileReader(file));
-		    String line = null;
-		    while ((line = reader.readLine()) != null) {
-		        input += line;
+		    while (reader.readLine() != null) 
+		        line_count++;
+		} catch (FileNotFoundException e) {
+		    e.printStackTrace();
+		} catch (IOException e) {
+		    e.printStackTrace();
+		} finally {
+		    try {
+		        if (reader != null) {
+		            reader.close();
+		        }
+		    } catch (IOException e) {
+		    	e.printStackTrace();
+		    }
+		}
+		return line_count;
+	}
+	public static void write_out_message(String filename,String message)
+	{
+		BufferedWriter bw = null;
+		FileWriter fw = null;
+
+		try
+		{
+
+			fw = new FileWriter(filename);
+			bw = new BufferedWriter(fw);
+			bw.write(message);
+
+			System.out.println("Done");
+
+		} catch (IOException e) {
+
+			e.printStackTrace();
+
+		} finally {
+
+			try {
+
+				if (bw != null)
+					bw.close();
+
+				if (fw != null)
+					fw.close();
+
+			} catch (IOException ex) {
+
+				ex.printStackTrace();
+
+			}
+
+		}
+
+	}
+	public static void main (String args[])
+	{
+		String key_file = "";
+		String crypto_file = "";
+		String out_file = "";
+		if(args.length == 3)
+		{
+			key_file = args[0];
+			crypto_file = args[1];
+			out_file = args[2];
+		}
+		File file = new File(crypto_file);
+		String[] input = new String[get_line_count(crypto_file)];
+		BufferedReader reader = null;
+		int line_count = 0;	
+		try {
+			String line = "";
+		    reader = new BufferedReader(new FileReader(file));
+		    while ((line = reader.readLine()) != null) 
+		    {
+		        input[line_count++] = line;
 		    }
 		} catch (FileNotFoundException e) {
 		    e.printStackTrace();
@@ -62,38 +138,24 @@ public class decrypt
 		            reader.close();
 		        }
 		    } catch (IOException e) {
+		    	e.printStackTrace();
 		    }
 		}
-		// we create a new byte array that has all the bytes of our input
-		// StringBuilder x = new StringBuilder("");
-		// int string = 0;
-		// for(int i = 0; i < input.length() ; i++)
-		// {
-		// 	if(input.charAt(i) != 'x')
-		// 	{
-		// 		if(string == 0){
-		// 			string += Character.getNumericValue((input.charAt(i)));
-		// 		}
-		// 		else
-		// 		{
-		// 			string *= 10;
-		// 			string += Character.getNumericValue((input.charAt(i)));
-		// 		}
-		// 	}
-		// 	else
-		// 	{
-		// 		x.append((char)string);
-		// 		string = 0;
-		// 	}
-		// }
-		
-		BigInteger cypher_text = new BigInteger(input);
-		String[] keys = get_keys();
+		BigInteger cypher_text = new BigInteger("0");
+		String[] keys = get_keys(key_file);
 		BigInteger D = new BigInteger(keys[1]);
 		BigInteger N = new BigInteger(keys[5]);
-		cypher_text = cypher_text.modPow(D,N);
-		System.out.println(cypher_text.toString());
-		int text = Integer.valueOf(cypher_text.toString());
-		System.out.println((char) text);
+		int ascii_text = 0;
+		String plain_text_message = "";
+
+		for(int i = 0; i < line_count; i++)
+		{
+			cypher_text = new BigInteger(input[i]);
+			cypher_text = cypher_text.modPow(D,N);
+			ascii_text = Integer.valueOf(cypher_text.toString());
+			plain_text_message += String.valueOf((char) ascii_text);
+		}
+		write_out_message(out_file,plain_text_message);
+		
 	}
 }

@@ -9,4 +9,4 @@ Once your key file has been created, write your message into a plain text file o
 
 To encrypt the message, simply run the encrypt program via the command line "java encrypt {name of key file} {name of plain text message file}". This program will then create a new file called encrypted_message.txt and fill it with the encrypted message. If such a file already exists it will replace what was in it with the new message.
 
-To decrypt the message, run the command "java decrypt {name of key file} {name of output file}", where the name of the output file is the file you want the message to be placed in. If the file already exists it will replace its contents with the message. 
+To decrypt the message, run the command "java decrypt {name of key file} {name of encrypted message file} {name of output file}", where the name of the output file is the file you want the message to be placed in. If the file already exists it will replace its contents with the message. 
