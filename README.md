@@ -1,7 +1,7 @@
 # rsa
 These set of programs will create a rsa key, as well as encrypt and decrypt a message using the keys generated (probably)
 
-#How To use it
+# How To use it
 
 run the rsa program via the line "java rsa {file name}" to generate your keys and have them written to your file of choice
 
