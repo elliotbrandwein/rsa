@@ -4,9 +4,45 @@ import java.util.*;
 import java.security.SecureRandom;
 public class rsa
 {
+	public static void write_out_keys(String filename, String keys)
+	{
+		BufferedWriter bw = null;
+		FileWriter fw = null;
 
+		try
+		{
+
+			fw = new FileWriter(filename);
+			bw = new BufferedWriter(fw);
+			bw.write(keys);
+
+			System.out.println("Done");
+
+		} catch (IOException e) {
+
+			e.printStackTrace();
+
+		} finally {
+
+			try {
+
+				if (bw != null)
+					bw.close();
+
+				if (fw != null)
+					fw.close();
+
+			} catch (IOException ex) {
+
+				ex.printStackTrace();
+
+			}
+
+		}
+
+	}
 	public final static int KEY_SIZE = 1025;
-	// I assume E is relativaly prime to our key because it's prime 
+	// I assume E is relatively prime to our key because it's prime 
 	// and our key is made of 2 primes that are larger then 65537
 	public final static BigInteger E = new BigInteger("65537");
 
@@ -26,6 +62,14 @@ public class rsa
 	public static void  main (String args[])
 	{
 		// step 1: generate our two large primes
+		String filename = "";
+		if(args.length == 1)
+			filename = args[0];
+		else
+		{
+			System.out.println("incorrect number of args, terminating program");
+			System.exit(0);
+		}
 		BigInteger p = new BigInteger("0");
 		BigInteger q = new BigInteger("0");
 		Random seed_p = new SecureRandom();
@@ -42,7 +86,7 @@ public class rsa
 		//step 2: create our key n, such that n = p*q
 		BigInteger n = p.multiply(q);
 
-		//step 3: create a small int e such that it is relativly prime to phi(n)
+		//step 3: create a small int e such that it is relatively prime to phi(n)
 		BigInteger phi = (p.subtract(new BigInteger("1")));
 		phi = phi.multiply(q.subtract(new BigInteger("1")));
 		// I will assume 65537 is always good, which will be our E  
@@ -50,9 +94,10 @@ public class rsa
 		//step 4: get an integer d such that d * e === 1 mod(phi)
 		BigInteger d = E.modInverse(phi);
 
-		// hack: we output the keys and pipe via bash to file
-		System.out.println("Private key:\n"+ d + "\n" + n + "\nPublic key:\n" + E + "\n" + n );
-		
+		//step 5: write out the keys to a text file
+		String keys = "Private key:\n"+ d + "\n" + n + "\nPublic key:\n" + E + "\n" + n ;
+
+		write_out_keys(filename,keys);
 		
 	}	
 }
