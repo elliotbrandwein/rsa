@@ -41,7 +41,7 @@ public class rsa
 		}
 
 	}
-	public final static int KEY_SIZE = 1025;
+	public final static int KEY_SIZE = 2048;
 	// I assume E is relatively prime to our key because it's prime 
 	// and our key is made of 2 primes that are larger then 65537
 	public final static BigInteger E = new BigInteger("65537");
