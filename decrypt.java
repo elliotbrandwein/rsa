@@ -57,6 +57,7 @@ public class decrypt
 
 			fw = new FileWriter(filename);
 			bw = new BufferedWriter(fw);
+			// this line actually does the decryption 
 			message = new String((new BigInteger(message)).modPow(d, n).toByteArray());
 			bw.write(message);
 
