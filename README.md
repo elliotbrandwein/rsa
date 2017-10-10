@@ -3,12 +3,11 @@ These set of programs will create a rsa key, as well as encrypt and decrypt a me
 
 # How To use it
 
-run the rsa program via the line "java rsa {file name}" to generate your keys and have them written to your file of choice
+Run the rsa program via the line "java rsa {file name}" to generate your keys and have them written to your file of choice.
 
 Once your key file has been created, write your message into a plain text file of your choice your current working directory. 
 
 To encrypt the message, simply run the encrypt program via the command line "java encrypt {name of key file} {name of plain text message file}". This program will then create a new file called encrypted_message.txt and fill it with the encrypted message. If such a file already exists it will replace what was in it with the new message.
 
-To decrypt the message, run the command "java decrypt {name of key file} {name of encrypted message file} {name of output file}", where the name of the output file is the file you want the message to be placed in. If the file already exists it will replace its contents with the message. 
-
-So it turns out, I will probably need to convert all my encryption math to base 2, which is going to take some time. 
+To decrypt the message, run the command "java decrypt {name of key file} {name of encrypted message file} {name of output file}", where the name of the output file is the file you want the message to be placed in. If the file already exists it will replace its contents with the message. It will also print out the decrypted message to the console. 
+ 

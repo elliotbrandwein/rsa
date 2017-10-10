@@ -83,7 +83,7 @@ public class encrypt
 		}
 		return output;
 	}
-	public static void write_cypto_message(String message)
+	public static void write_cypto_message(String message, BigInteger e, BigInteger n)
 	{
 		final String OUT_FILE = "encrypted_message.txt";
 		BufferedWriter bw = null;
@@ -91,16 +91,17 @@ public class encrypt
 
 		try
 		{
-
+			// here is where i create encrypt the message
+			String crypt_message = (new BigInteger(message.getBytes())).modPow(e, n).toString();
 			fw = new FileWriter(OUT_FILE);
 			bw = new BufferedWriter(fw);
-			bw.write(message);
+			bw.write(crypt_message);
 
 			System.out.println("Done");
 
-		} catch (IOException e) {
+		} catch (IOException error) {
 
-			e.printStackTrace();
+			error.printStackTrace();
 
 		} finally {
 
@@ -131,22 +132,16 @@ public class encrypt
 		}
 		else
 		{
-			System.out.println("incorrect number of args. Terminating program");
+			System.out.println("Incorrect number of args.\nPlease give the key file, then the message file.\nTerminating program");
 			System.exit(0);
 		}
 
 		String message = get_message(message_file);
 		String[] keys = get_keys(key_file);
-		String crypto_message = "";
 		BigInteger letter = new BigInteger("0");
 		BigInteger E = new BigInteger(keys[4]);
 		BigInteger N = new BigInteger(keys[5]);
-		for (int i = 0; i< message.length(); i++)
-		{
-			letter = new BigInteger(String.valueOf((int)message.charAt(i)));
-			letter = letter.modPow(E,N);
-			crypto_message += letter.toString() + "\n";
-		}
-		write_cypto_message(crypto_message);	   
+		
+		write_cypto_message(message,E,N);	   
 	}
 }

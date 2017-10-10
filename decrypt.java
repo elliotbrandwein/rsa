@@ -4,6 +4,7 @@ import java.nio.file.*;
 import java.math.*;
 public class decrypt
 {
+
 	public static String[] get_keys(String filename)
 	{
 		File file = new File(filename);
@@ -45,31 +46,8 @@ public class decrypt
 		}
 		return output;
 	}
-	public static int get_line_count(String filename)
-	{
-		File file = new File(filename);
-		BufferedReader reader = null;
-		int line_count = 0;
-		try {
-		    reader = new BufferedReader(new FileReader(file));
-		    while (reader.readLine() != null) 
-		        line_count++;
-		} catch (FileNotFoundException e) {
-		    e.printStackTrace();
-		} catch (IOException e) {
-		    e.printStackTrace();
-		} finally {
-		    try {
-		        if (reader != null) {
-		            reader.close();
-		        }
-		    } catch (IOException e) {
-		    	e.printStackTrace();
-		    }
-		}
-		return line_count;
-	}
-	public static void write_out_message(String filename,String message)
+	
+	public static void write_out_message(String message,String filename, BigInteger d, BigInteger n)
 	{
 		BufferedWriter bw = null;
 		FileWriter fw = null;
@@ -79,9 +57,10 @@ public class decrypt
 
 			fw = new FileWriter(filename);
 			bw = new BufferedWriter(fw);
+			message = new String((new BigInteger(message)).modPow(d, n).toByteArray());
 			bw.write(message);
 
-			System.out.println("Done");
+			System.out.println("message was: "+ message);
 
 		} catch (IOException e) {
 
@@ -106,27 +85,18 @@ public class decrypt
 		}
 
 	}
-	public static void main (String args[])
+	public static String get_message(String filename)
 	{
-		String key_file = "";
-		String crypto_file = "";
-		String out_file = "";
-		if(args.length == 3)
-		{
-			key_file = args[0];
-			crypto_file = args[1];
-			out_file = args[2];
-		}
-		File file = new File(crypto_file);
-		String[] input = new String[get_line_count(crypto_file)];
+		File file = new File(filename);
+		String crypto_message = "";
 		BufferedReader reader = null;
-		int line_count = 0;	
+
 		try {
 			String line = "";
 		    reader = new BufferedReader(new FileReader(file));
 		    while ((line = reader.readLine()) != null) 
 		    {
-		        input[line_count++] = line;
+		        crypto_message+=line;
 		    }
 		} catch (FileNotFoundException e) {
 		    e.printStackTrace();
@@ -141,21 +111,31 @@ public class decrypt
 		    	e.printStackTrace();
 		    }
 		}
-		BigInteger cypher_text = new BigInteger("0");
+		return crypto_message;
+	}
+	public static void main (String args[])
+	{
+		String key_file = "";
+		String crypto_file = "";
+		String out_file = "";
+		
+		if(args.length == 3)
+		{
+			key_file = args[0];
+			crypto_file = args[1];
+			out_file = args[2];
+		}
+
+		else
+		{
+			System.out.println("Incorrect number of args.\nPlease give the key file, then the encrypted file, then the output file.\nTerminating program");
+			System.exit(0);
+		}
+	
+		String crypto_message = get_message(crypto_file);
 		String[] keys = get_keys(key_file);
 		BigInteger D = new BigInteger(keys[1]);
 		BigInteger N = new BigInteger(keys[5]);
-		int ascii_text = 0;
-		String plain_text_message = "";
-
-		for(int i = 0; i < line_count; i++)
-		{
-			cypher_text = new BigInteger(input[i]);
-			cypher_text = cypher_text.modPow(D,N);
-			ascii_text = Integer.valueOf(cypher_text.toString());
-			plain_text_message += String.valueOf((char) ascii_text);
-		}
-		write_out_message(out_file,plain_text_message);
-		
+		write_out_message(crypto_message,out_file,D,N);
 	}
 }
