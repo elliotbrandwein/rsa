@@ -64,7 +64,7 @@ public class encrypt_file {
     }
     return list;
   }
-  // cannot test this works until decrypt works
+  
   public static void write_cypto_message(ArrayList<Byte> message, String filename, BigInteger e, BigInteger n)
   {
     final String OUTFILE = ( "encrypted_" + filename );
@@ -78,12 +78,13 @@ public class encrypt_file {
       {
         byteArray[index++] = b;
       }
+      // cannot test this works until decrypt works
       // crypt_message = (new BigInteger(byteArray).modPow(e, n);
-      crypt_message = new BigInteger(byteArray).toString().getBytes();
-      fw = new FileWriter(OUT_FILE);
-      out.write(crypt_message);
-      System.out.println("Done");
 
+      byteArray = new BigInteger(byteArray).toString().getBytes();
+      out.write(byteArray);
+      System.out.println("Done");
+      out.close();
     } 
     catch (IOException error)
     {
