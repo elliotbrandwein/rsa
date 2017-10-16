@@ -62,6 +62,7 @@ public class rsa
 	public static void  main (String args[])
 	{
 		// step 1: generate our two large primes
+		System.out.println("step 1: generate our two large primes");
 		String filename = "";
 		if(args.length == 1)
 			filename = args[0];
@@ -78,23 +79,28 @@ public class rsa
 		q = getPrimeNumber(KEY_SIZE,seed_q);
 
 		// bonus step: make sure p! = q;
+		System.out.println("bonus step: make sure p! = q;");
 		while(p.compareTo(q) == 0)
 		{
 			q = getPrimeNumber(KEY_SIZE,seed_q);
 		}
 
 		//step 2: create our key n, such that n = p*q
+		System.out.println("step 2: create our key n, such that n = p*q");
 		BigInteger n = p.multiply(q);
 
 		//step 3: create a small int e such that it is relatively prime to phi(n)
+		System.out.println("step 3: create a small int e such that it is relatively prime to phi(n)");		
 		BigInteger phi = (p.subtract(new BigInteger("1")));
 		phi = phi.multiply(q.subtract(new BigInteger("1")));
 		// I will assume 65537 is always good, which will be our E  
 		
 		//step 4: get an integer d such that d * e === 1 mod(phi)
+		System.out.println("step 4: get an integer d such that d * e === 1 mod(phi)");
 		BigInteger d = E.modInverse(phi);
 
 		//step 5: write out the keys to a text file
+		System.out.println("step 5: write out the keys to a text file");
 		String keys = "Private key:\n"+ d + "\n" + n + "\nPublic key:\n" + E + "\n" + n ;
 
 		write_out_keys(filename,keys);
