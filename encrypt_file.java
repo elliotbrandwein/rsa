@@ -64,6 +64,33 @@ public class encrypt_file {
     }
     return list;
   }
+  // cannot test this works until decrypt works
+  public static void write_cypto_message(ArrayList<Byte> message, String filename, BigInteger e, BigInteger n)
+  {
+    final String OUTFILE = ( "encrypted_" + filename );
+    try
+    {
+      FileOutputStream out = new FileOutputStream(OUTFILE);
+      
+      byte[] byteArray = new byte[message.size()];
+      int index = 0;
+      for (byte b : message)
+      {
+        byteArray[index++] = b;
+      }
+      // crypt_message = (new BigInteger(byteArray).modPow(e, n);
+      crypt_message = new BigInteger(byteArray).toString().getBytes();
+      fw = new FileWriter(OUT_FILE);
+      out.write(crypt_message);
+      System.out.println("Done");
+
+    } 
+    catch (IOException error)
+    {
+      error.printStackTrace();
+    } 
+
+  }
   public static void main(String[] args) throws IOException
   {
     String key_file = "";
