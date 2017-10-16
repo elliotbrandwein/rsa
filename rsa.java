@@ -62,7 +62,6 @@ public class rsa
 	public static void  main (String args[])
 	{
 		// step 1: generate our two large primes
-		System.out.println("step 1: generate our two large primes");
 		String filename = "";
 		if(args.length == 1)
 			filename = args[0];
@@ -71,6 +70,8 @@ public class rsa
 			System.out.println("incorrect number of args. Terminating program");
 			System.exit(0);
 		}
+		
+		System.out.println("step 1: generate our two large primes");
 		BigInteger p = new BigInteger("0");
 		BigInteger q = new BigInteger("0");
 		Random seed_p = new SecureRandom();
