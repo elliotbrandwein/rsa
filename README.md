@@ -11,3 +11,7 @@ To encrypt the message, simply run the encrypt program via the command line "jav
 
 To decrypt the message, run the command "java decrypt {name of key file} {name of encrypted message file} {name of output file}", where the name of the output file is the file you want the message to be placed in. If the file already exists it will replace its contents with the message. It will also print out the decrypted message to the console. 
  
+# TODO
+ Im working on a new set of programs encrypt_file and decrypt_file that will do the same things as before, they will work on any type of file, and not just text.
+ The next goal after that is to encrypt the key file 
+ The last goal is to put this whole program into a gui and make it look nice. 

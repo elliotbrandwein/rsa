@@ -45,9 +45,9 @@ public class encrypt_file {
     }
     return output;
   }
-  public static List<Byte> get_message(String filename)
+  public static ArrayList<Byte> get_message(String filename)
   {
-    List<Byte> list = new ArrayList<Byte>();
+    ArrayList<Byte> list = new ArrayList<Byte>();
     try 
     {
       FileInputStream in = new FileInputStream(filename); 
@@ -67,7 +67,8 @@ public class encrypt_file {
   
   public static void write_cypto_message(ArrayList<Byte> message, String filename, BigInteger e, BigInteger n)
   {
-    final String OUTFILE = ( "encrypted_" + filename );
+    // final String OUTFILE = ( "encrypted_" + filename );
+    final String OUTFILE = ( "test.txt");
     try
     {
       FileOutputStream out = new FileOutputStream(OUTFILE);
@@ -80,9 +81,15 @@ public class encrypt_file {
       }
       // cannot test this works until decrypt works
       // crypt_message = (new BigInteger(byteArray).modPow(e, n);
-
-      byteArray = new BigInteger(byteArray).toString().getBytes();
-      out.write(byteArray);
+      // String crypt_message = (new BigInteger(message.getBytes())).modPow(e, n).toString();
+      // byteArray = new BigInteger(byteArray).toString().getBytes();
+      BigInteger test = new BigInteger(byteArray);
+      byte[] array = test.toByteArray();
+      array = Arrays.copyOfRange(array, 0, array.length); 
+      byte temp = array[1];
+      // array[0] = array[1];
+      // array[1] = temp;     
+      out.write(temp);
       System.out.println("Done");
       out.close();
     } 
@@ -108,31 +115,20 @@ public class encrypt_file {
     }
 
     String[] keys = get_keys(key_file);
-    BigInteger letter = new BigInteger("0");
     BigInteger E = new BigInteger(keys[4]);
     BigInteger N = new BigInteger(keys[5]);
+    ArrayList<Byte> message; 
+    message = get_message(message_file);
+    write_cypto_message(message,message_file,E,N);
+    // try
+    // {
+    //   out = new FileOutputStream(new String("encrypted_" + message_file));
+    //   message  = get_message(message_file);
+    //   for (int i = 0; i < message.size(); i++) {
+    //     if(i % 100 == 0) System.out.println(message.get(i));
+    //   out.write(message.get(i));
+    // }      
+    
   
-    FileOutputStream out = null;
-    List<Byte> message; 
-    try
-    {
-      out = new FileOutputStream(new String("encrypted_" + message_file));
-      message  = get_message(message_file);
-      for (int i = 0; i < message.size(); i++) {
-        if(i % 100 == 0) System.out.println(message.get(i));
-      out.write(message.get(i));
-    }      
-    }
-    catch(Exception e)
-    {
-      e.printStackTrace();
-    }
-    finally
-    {
-      if (out != null) 
-      {
-      out.close();
-      }
-    }
   }
 }
