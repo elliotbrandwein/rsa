@@ -3,7 +3,7 @@ import java.util.*;
 import java.io.*;
 import java.nio.*;
 
-public class copy {
+public class encrypt_file {
   public static String[] get_keys(String filename)
   {
     File file = new File(filename);
@@ -86,7 +86,6 @@ public class copy {
      
     String message_file = "face.jpg";
 
-    FileInputStream in = null;
     FileOutputStream out = null;
     List<Byte> message; 
     try
