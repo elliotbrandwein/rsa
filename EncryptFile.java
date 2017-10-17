@@ -81,6 +81,7 @@ public class EncryptFile {
       byteArray[0] = 0x01;
     
       BigInteger x = new BigInteger(byteArray);
+      x = x.modPow(e,n);
       byte[] newArray = x.toByteArray();
       byteArray = new byte[newArray.length -1 ];
       for( int i = 0; i < byteArray.length; i++)
@@ -114,8 +115,7 @@ public class EncryptFile {
     String[] keys = get_keys(key_file);
     BigInteger E = new BigInteger(keys[4]);
     BigInteger N = new BigInteger(keys[5]);
-    ArrayList<Byte> message; 
-    message = get_message(message_file);
+    ArrayList<Byte> message = get_message(message_file);
     write_cypto_message(message,message_file,E,N);   
   }
 }
