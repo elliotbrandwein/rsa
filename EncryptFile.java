@@ -3,7 +3,7 @@ import java.util.*;
 import java.io.*;
 import java.nio.*;
 
-public class encrypt_file {
+public class EncryptFile {
   public static String[] get_keys(String filename)
   {
     File file = new File(filename);
