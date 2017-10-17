@@ -67,37 +67,34 @@ public class encrypt_file {
   
   public static void write_cypto_message(ArrayList<Byte> message, String filename, BigInteger e, BigInteger n)
   {
-    // final String OUTFILE = ( "encrypted_" + filename );
-    final String OUTFILE = ( "test.txt");
+    
+    final String OUTFILE = ("encrypted_" + filename);
+  
     try
     {
       FileOutputStream out = new FileOutputStream(OUTFILE);
-      
-      byte[] byteArray = new byte[message.size()];
-      int index = 0;
+     
+      byte[] byteArray = new byte[message.size() + 1];
+      int index = 1;
       for (byte b : message)
-      {
         byteArray[index++] = b;
+      byteArray[0] = 0x01;
+    
+      BigInteger x = new BigInteger(byteArray);
+      byte[] newArray = x.toByteArray();
+      byteArray = new byte[newArray.length -1 ];
+      for( int i = 0; i < byteArray.length; i++)
+      {
+        byteArray[i] = newArray[i+1];
       }
-      // cannot test this works until decrypt works
-      // crypt_message = (new BigInteger(byteArray).modPow(e, n);
-      // String crypt_message = (new BigInteger(message.getBytes())).modPow(e, n).toString();
-      // byteArray = new BigInteger(byteArray).toString().getBytes();
-      BigInteger test = new BigInteger(byteArray);
-      byte[] array = test.toByteArray();
-      array = Arrays.copyOfRange(array, 0, array.length); 
-      byte temp = array[1];
-      // array[0] = array[1];
-      // array[1] = temp;     
-      out.write(temp);
-      System.out.println("Done");
+      out.write(byteArray);
       out.close();
     } 
     catch (IOException error)
     {
       error.printStackTrace();
     } 
-
+    System.out.println("Done");
   }
   public static void main(String[] args) throws IOException
   {
@@ -119,16 +116,6 @@ public class encrypt_file {
     BigInteger N = new BigInteger(keys[5]);
     ArrayList<Byte> message; 
     message = get_message(message_file);
-    write_cypto_message(message,message_file,E,N);
-    // try
-    // {
-    //   out = new FileOutputStream(new String("encrypted_" + message_file));
-    //   message  = get_message(message_file);
-    //   for (int i = 0; i < message.size(); i++) {
-    //     if(i % 100 == 0) System.out.println(message.get(i));
-    //   out.write(message.get(i));
-    // }      
-    
-  
+    write_cypto_message(message,message_file,E,N);   
   }
 }
