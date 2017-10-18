@@ -2,6 +2,7 @@ import java.lang.*;
 import java.io.*;
 import java.nio.file.*;
 import java.math.*;
+import java.util.*;
 public class DecryptFile
 {
 
@@ -49,41 +50,61 @@ public class DecryptFile
   
   public static void write_out_message(String message,String filename, BigInteger d, BigInteger n)
   {
-    BufferedWriter bw = null;
-    FileWriter fw = null;
-
+    final String OUTFILE = (filename);
     try
     {
-
-      fw = new FileWriter(filename);
-      bw = new BufferedWriter(fw);
-      // this line actually does the decryption 
-      message = new String((new BigInteger(message)).modPow(d, n).toByteArray());
-      bw.write(message);
-
-      
-    } catch (IOException e) {
-
-      e.printStackTrace();
-
-    } finally {
-
-      try {
-
-        if (bw != null)
-          bw.close();
-
-        if (fw != null)
-          fw.close();
-
-      } catch (IOException ex) {
-
-        ex.printStackTrace();
-
-      }
-
-    }
+      FileOutputStream out = new FileOutputStream(OUTFILE);
+      // byte[] byteArray = new byte[message.size() + 1];
+      // int index = 0;
+      // for (byte b : message)
+      //   byteArray[index++] = b;
+      // byteArray[0] = 0x01;
+    
+      // BigInteger x = new BigInteger(byteArray);
+      // x = x.modPow(d,n);
+      // byte[] newArray = x.toByteArray();
+      // byteArray = new byte[newArray.length  ];
+      // for( int i = 0; i < byteArray.length; i++)
+      // {
+      //   byteArray[i] = newArray[i];
+      // }
+      byte[] newArray = new BigInteger(message).modPow(d,n).toByteArray();
+      out.write(newArray);
+      out.close();
+    } 
+    catch (IOException error)
+    {
+      error.printStackTrace();
+    } 
     System.out.println("Done");
+  }
+  public static String get_message_string(String filename)
+  {
+    File file = new File(filename);
+    String crypto_message = "";
+    BufferedReader reader = null;
+
+    try {
+      String line = "";
+        reader = new BufferedReader(new FileReader(file));
+        while ((line = reader.readLine()) != null) 
+        {
+            crypto_message+=line;
+        }
+    } catch (FileNotFoundException e) {
+        e.printStackTrace();
+    } catch (IOException e) {
+        e.printStackTrace();
+    } finally {
+        try {
+            if (reader != null) {
+                reader.close();
+            }
+        } catch (IOException e) {
+          e.printStackTrace();
+        }
+    }
+    return crypto_message;
   }
   public static ArrayList<Byte> get_message(String filename)
   {
@@ -127,6 +148,7 @@ public class DecryptFile
     BigInteger D = new BigInteger(keys[1]);
     BigInteger N = new BigInteger(keys[5]);
     ArrayList<Byte> crypto_message = get_message(crypto_file);
-    write_out_message(crypto_message,out_file,D,N);
+    String CM = get_message_string(crypto_file);
+    write_out_message(CM,out_file,D,N);
   }
 }
