@@ -68,27 +68,79 @@ public class EncryptFile {
   {
     
     final String OUTFILE = ("encrypted_" + filename);
-  
+    System.out.println("message was  " + message.size() + " byte(s)");
     try
     {
       FileOutputStream out = new FileOutputStream(OUTFILE);
-     
       byte[] byteArray = new byte[message.size() + 1];
       int index = 1;
       for (byte b : message)
         byteArray[index++] = b;
       byteArray[0] = 0x01;
+      out.write(new BigInteger(byteArray).modPow(e,n).toByteArray());
+      out.close();
+    } 
+    catch (IOException error)
+    {
+      error.printStackTrace();
+    } 
+    System.out.println("Done");
+  }
+  public static byte[] get_244_bytes(ArrayList<Byte> message, BigInteger e, BigInteger n)
+  {
+      byte[] byteArray = new byte[message.size() + 1];
+      int index = 1;
+      for (byte b : message)
+        byteArray[index++] = b;
+      byteArray[0] = 0x01;
+      return new BigInteger(byteArray).modPow(e,n).toByteArray();
+  }
+   public static void write_cypto_message2(ArrayList<Byte> message, String filename, BigInteger e, BigInteger n, BigInteger d)
+  {
     
-      BigInteger x = new BigInteger(byteArray);
-      x = x.modPow(e,n);
-      // byte[] newArray = x.toByteArray();
-      // byteArray = new byte[newArray.length -1 ];
-      // for( int i = 0; i < byteArray.length; i++)
+    final String OUTFILE = ("plain_copy_" + filename);
+    System.out.println("message was  " + message.size() + " byte(s)");
+    try
+    {
+      FileOutputStream out = new FileOutputStream(OUTFILE);
+      // ArrayList<Byte> outMessage = new ArrayList<Byte>();
+      // int index = 0;;
+      // int size = message.size();
+      // boolean loop = true;
+      // BigInteger x; 
+      // int loopLength;
+      // byte[] byteArray;
+      // while(loop)
       // {
-      //   byteArray[i] = newArray[i+1];
+      //   if(size > 245){
+      //     // we will be amending 1 byte to each chunk, so we only decrease size by 244
+      //     size -= 244;
+      //     loopLength = 245;
+      //   }
+      //   else
+      //   {
+      //     loop = false;
+      //     loopLength = size;
+      //   }
+      //   byteArray = new byte[size + 1];
+      //   byteArray[0] = 0x01;
+      //   for(int i = 0; i < size; i++)
+      //   {
+      //     byteArray[i+1] = message.get(index++);
+      //   }
+      //   x = new BigInteger(byteArray);
+      //   x = x.modPow(e,n);
+      //   byteArray = x.toByteArray();
+      //   for(int i = 0; i < size; i++)
+      //     outMessage.add(byteArray[i]);
       // }
-      // out.write(byteArray);
-      out.write(x.toByteArray());
+      // index = 0;
+      // byteArray = new byte[outMessage.size()];
+      // for(byte b : outMessage)
+      //   byteArray[index++] = b;
+      // x = new BigInteger(byteArray);
+      // x = x.modPow(e,n);
+      out.write(get_244_bytes(message,e,n));
       out.close();
     } 
     catch (IOException error)
@@ -117,6 +169,7 @@ public class EncryptFile {
     BigInteger N = new BigInteger(keys[5]);
     BigInteger D = new BigInteger(keys[1]);
     ArrayList<Byte> message = get_message(message_file);
-    write_cypto_message(message,message_file,E,N,D);   
+    write_cypto_message2(message,message_file,E,N,D); 
+    write_cypto_message(message,message_file,E,N,D);  
   }
 }
