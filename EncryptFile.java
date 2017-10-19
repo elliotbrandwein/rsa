@@ -17,8 +17,7 @@ public class EncryptFile {
       String line = null;
       while ((line = reader.readLine()) != null) 
       {
-          output[index] = line;
-          index++;
+          output[index++] = line;
       }
     } 
     catch (FileNotFoundException e) 
@@ -65,7 +64,7 @@ public class EncryptFile {
     return list;
   }
   
-  public static void write_cypto_message(ArrayList<Byte> message, String filename, BigInteger e, BigInteger n)
+  public static void write_cypto_message(ArrayList<Byte> message, String filename, BigInteger e, BigInteger n, BigInteger d)
   {
     
     final String OUTFILE = ("encrypted_" + filename);
@@ -82,13 +81,14 @@ public class EncryptFile {
     
       BigInteger x = new BigInteger(byteArray);
       x = x.modPow(e,n);
-      byte[] newArray = x.toByteArray();
-      byteArray = new byte[newArray.length -1 ];
-      for( int i = 0; i < byteArray.length; i++)
-      {
-        byteArray[i] = newArray[i+1];
-      }
-      out.write(byteArray);
+      // byte[] newArray = x.toByteArray();
+      // byteArray = new byte[newArray.length -1 ];
+      // for( int i = 0; i < byteArray.length; i++)
+      // {
+      //   byteArray[i] = newArray[i+1];
+      // }
+      // out.write(byteArray);
+      out.write(x.toByteArray());
       out.close();
     } 
     catch (IOException error)
@@ -115,7 +115,8 @@ public class EncryptFile {
     String[] keys = get_keys(key_file);
     BigInteger E = new BigInteger(keys[4]);
     BigInteger N = new BigInteger(keys[5]);
+    BigInteger D = new BigInteger(keys[1]);
     ArrayList<Byte> message = get_message(message_file);
-    write_cypto_message(message,message_file,E,N);   
+    write_cypto_message(message,message_file,E,N,D);   
   }
 }
