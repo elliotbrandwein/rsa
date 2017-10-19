@@ -58,18 +58,9 @@ public class DecryptFile
       int index = 0;
       for(byte b : message)
         byteArray[index++] = b;
-      BigInteger plainTextMessage = new BigInteger(byteArray); 
-      plainTextMessage = plainTextMessage.modPow(d,n);
-      // BigInteger x = new BigInteger(byteArray);
-      // x = x.modPow(d,n);
-      // byte[] newArray = x.toByteArray();
-      // byteArray = new byte[newArray.length  ];
-      // for( int i = 0; i < byteArray.length; i++)
-      // {
-      //   byteArray[i] = newArray[i];
-      // }
-      // byte[] newArray = new BigInteger(message).modPow(d,n).toByteArray();
-      byte[] newArray = plainTextMessage.toByteArray();
+      BigInteger x = new BigInteger(byteArray); 
+      x = x.modPow(d,n);
+      byte[] newArray = x.toByteArray();
       byteArray = new byte[newArray.length -1 ];
       for( int i = 0; i < byteArray.length; i++)
       {
@@ -129,8 +120,6 @@ public class DecryptFile
     {
       e.printStackTrace();
     }
-    if(list.isEmpty() == false)
-      System.out.println("have message to decrypt");
     return list;
   }
   public static void main (String args[])
@@ -156,7 +145,6 @@ public class DecryptFile
     BigInteger D = new BigInteger(keys[1]);
     BigInteger N = new BigInteger(keys[5]);
     ArrayList<Byte> crypto_message = get_message(crypto_file);
-    // String CM = get_message_string(crypto_file);
     write_out_message(crypto_message,out_file,D,N);
   }
 }
