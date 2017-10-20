@@ -51,6 +51,7 @@ public class DecryptFile
   public static void write_out_message(ArrayList<Byte> message,String filename, BigInteger d, BigInteger n)
   {
     final String OUTFILE = (filename);
+    System.out.println("Message was  " + message.size() + " byte(s)");
     try
     {
       FileOutputStream out = new FileOutputStream(OUTFILE);
@@ -73,35 +74,7 @@ public class DecryptFile
     {
       error.printStackTrace();
     } 
-    System.out.println("Done");
-  }
-  public static String get_message_string(String filename)
-  {
-    File file = new File(filename);
-    String crypto_message = "";
-    BufferedReader reader = null;
-
-    try {
-      String line = "";
-        reader = new BufferedReader(new FileReader(file));
-        while ((line = reader.readLine()) != null) 
-        {
-            crypto_message+=line;
-        }
-    } catch (FileNotFoundException e) {
-        e.printStackTrace();
-    } catch (IOException e) {
-        e.printStackTrace();
-    } finally {
-        try {
-            if (reader != null) {
-                reader.close();
-            }
-        } catch (IOException e) {
-          e.printStackTrace();
-        }
-    }
-    return crypto_message;
+    System.out.println("Decryption complete");
   }
   public static ArrayList<Byte> get_message(String filename)
   {
