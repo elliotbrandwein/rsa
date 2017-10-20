@@ -11,3 +11,4 @@
 *.jpg
 *.class
 *.txt
+.DS_Store
